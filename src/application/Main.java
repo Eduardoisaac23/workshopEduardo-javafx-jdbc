@@ -1,26 +1,39 @@
 package application;
-	
+
+import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-
 public class Main extends Application {
-	@Override
+
+	@Override               //argumento palco da minha sena
 	public void start(Stage primaryStage) {
-		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setScene(scene);
+		//INSTANCIOU UM NOVO OBJETO  DO TIPO FXMLLoader  LOADER
+		try {                                                        //este e o caminho da view
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainView.fxml"));
+			//depois chamamos um loader.load(); e carrega a View
+			Parent parent = loader.load();
+			// criar um objeto do tipo Scene  que terá mainScene como sena principal
+			// e istânciado esta sena já passando como argumento o bojeto principal da minha View
+			//No caso e o AnchorPane vasio
+			Scene mainScene = new Scene(parent);//resumindo criou a sena
+			// primaryStage palco da minha sena que etá estanciado no meu metodo void 
+			//será setado como minha sena principal
+			primaryStage.setScene(mainScene);
+			//definir o titolo do meu palco
+			primaryStage.setTitle("Sample JavaFX application");
+			//Mostrar o palco
 			primaryStage.show();
-		} catch(Exception e) {
+			
+		}catch(IOException e){
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
