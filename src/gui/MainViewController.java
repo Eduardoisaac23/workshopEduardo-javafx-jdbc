@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.sun.source.tree.SynchronizedTree;
+
 import application.Main;
 import gui.util.Alerts;
 import javafx.fxml.FXML;
@@ -36,7 +38,8 @@ public class MainViewController implements Initializable{
 	
 	@FXML
 	public void MenuItemDepartamentoAction() {
-		System.out.println("MenuItemDepartamentoAction");
+		loadView("/gui/DepartamentoList.fxml");
+
 	}
 	
 	@FXML
@@ -52,7 +55,7 @@ public class MainViewController implements Initializable{
 	}
 	
 	// função
-	private void loadView(String absoluteName) {
+	private synchronized void loadView(String absoluteName) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			VBox newVBox = loader.load();
