@@ -4,13 +4,15 @@ import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
+	// atributo para guardar referência
+	private static Scene mainScene;
+	
 	@Override               //argumento palco da minha sena
 	public void start(Stage primaryStage) {
 		//INSTANCIOU UM NOVO OBJETO  DO TIPO FXMLLoader  LOADER
@@ -25,7 +27,7 @@ public class Main extends Application {
 			// criar um objeto do tipo Scene  que terá mainScene como sena principal
 			// e istânciado esta sena já passando como argumento o bojeto principal da minha View
 			//No caso e o AnchorPane vasio
-			Scene mainScene = new Scene(scrollPane);//resumindo criou a sena
+			mainScene = new Scene(scrollPane);//resumindo criou a sena
 			// primaryStage palco da minha sena que etá estanciado no meu metodo void 
 			//será setado como minha sena principal
 			primaryStage.setScene(mainScene);
@@ -37,6 +39,10 @@ public class Main extends Application {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+	}
+	//metodo para pegar referência
+	public static Scene getMainScene() {
+		return mainScene;
 	}
 
 	public static void main(String[] args) {
