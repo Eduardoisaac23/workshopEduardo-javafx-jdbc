@@ -15,7 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Services.DepartamentoService;
-import model.entities.Departamento;
+import model.entities.Departmento;
 
 public class DepartamentoListController implements Initializable {
 
@@ -26,20 +26,20 @@ public class DepartamentoListController implements Initializable {
 	
 	
 	@FXML
-	private TableView<Departamento> tableViewDepartamento;
+	private TableView<Departmento> tableViewDepartamento;
 	
 	@FXML
-	private TableColumn<Departamento, Integer> tableColumnId;
+	private TableColumn<Departmento, Integer> tableColumnId;
 	
 	@FXML
-	private TableColumn<Departamento, String> tableColumnName;
+	private TableColumn<Departmento, String> tableColumnName;
 	
 	@FXML
 	private Button btNew;
 	
 	
 	//Vai ter que carregar a lista no ObservableList
-	private ObservableList<Departamento> obsList;
+	private ObservableList<Departmento> obsList;
 	
 	
 	@FXML
@@ -79,7 +79,7 @@ public class DepartamentoListController implements Initializable {
 			throw new IllegalStateException("Serviçoi estava nulo");
 		}
 		
-		List<Departamento> list = servico.findAll();
+		List<Departmento> list = servico.findAll();
 		//aqui instância meu  ObservableList pegando os dados originais da listinha
 		obsList = FXCollections.observableArrayList(list);
 		tableViewDepartamento.setItems(obsList);
