@@ -13,19 +13,21 @@ public class Funcionario implements Serializable {
 	private Date birthDate;
 	private Double baseSalary;
 	
-	private Departmento departmento;
+	private Departamento departamento;
 	
 	public Funcionario() {
 	}
 
-	public Funcionario(Integer id, String name, String email, Date birthDate, Double baseSalary, Departmento departmento) {
+	public Funcionario(Integer id, String name, String email, Date birthDate, Double baseSalary, Departamento departamento) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.birthDate = birthDate;
 		this.baseSalary = baseSalary;
-		this.departmento = departmento;
+		this.departamento = departamento;
 	}
+
+	
 
 	public Integer getId() {
 		return id;
@@ -67,12 +69,12 @@ public class Funcionario implements Serializable {
 		this.baseSalary = baseSalary;
 	}
 
-	public Departmento getDepartment() {
-		return departmento;
+	public Departamento getDepartamento() {
+		return departamento;
 	}
 
-	public void setDepartment(Departmento departmento) {
-		this.departmento = departmento;
+	public void setDepartamento(Departamento departamento) {
+		this.departamento = departamento;
 	}
 
 	@Override
@@ -103,6 +105,6 @@ public class Funcionario implements Serializable {
 	@Override
 	public String toString() {
 		return "Funcionario [id=" + id + ", name=" + name + ", email=" + email + ", birthDate=" + birthDate + ", baseSalary="
-				+ baseSalary + ", departmento=" + departmento + "]";
+				+ baseSalary + ", departamento=" + departamento + "]";
 	}
 }

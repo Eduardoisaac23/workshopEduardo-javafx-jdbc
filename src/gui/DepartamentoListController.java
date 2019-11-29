@@ -23,7 +23,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Services.DepartamentoService;
-import model.entities.Departmento;
+import model.entities.Departamento;
+
+
 
 public class DepartamentoListController implements Initializable {
 
@@ -34,26 +36,28 @@ public class DepartamentoListController implements Initializable {
 	
 	
 	@FXML
-	private TableView<Departmento> tableViewDepartamento;
+	private TableView<Departamento> tableViewDepartamento;
 	
 	@FXML
-	private TableColumn<Departmento, Integer> tableColumnId;
+	private TableColumn<Departamento, Integer> tableColumnId;
 	
 	@FXML
-	private TableColumn<Departmento, String> tableColumnName;
+	private TableColumn<Departamento, String> tableColumnName;
 	
 	@FXML
 	private Button btNew;
 	
 	
 	//Vai ter que carregar a lista no ObservableList
-	private ObservableList<Departmento> obsList;
+	private ObservableList<Departamento> obsList;
 	
 	
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = gui.util.Utils.currentStage(event);
-		createDialogForm("/gui/DepartmentoForm.fxml", parentStage);
+		//instancia um departamento vazio
+		Departamento obj = new Departamento();
+		createDialogForm(obj, "/gui/DepartamentoForm.fxml", parentStage);
 	}
 	
 	//metodo para injetar dependência por outro lugar
@@ -88,7 +92,7 @@ public class DepartamentoListController implements Initializable {
 			throw new IllegalStateException("Serviçoi estava nulo");
 		}
 		
-		List<Departmento> list = servico.findAll();
+		List<Departamento> list = servico.findAll();
 		//aqui instância meu  ObservableList pegando os dados originais da listinha
 		obsList = FXCollections.observableArrayList(list);
 		tableViewDepartamento.setItems(obsList);
@@ -96,12 +100,16 @@ public class DepartamentoListController implements Initializable {
 	}
 	
 	//finção para carregar a janela do formulário de um novo departamento
-	private void createDialogForm(String absoluteName, Stage parenStage) {
+	private void createDialogForm(Departamento obj, String absoluteName, Stage parenStage) {
 		
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 			
+			DepartamentoFormController controller = loader.getController();
+			controller.setDepartamento(obj);
+			controller.updateFormDate();
+
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com o dado do departamento");
 			dialogStage.setScene(new Scene(pane));

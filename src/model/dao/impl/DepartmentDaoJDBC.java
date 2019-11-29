@@ -12,7 +12,7 @@ import db.DB;
 import db.DbException;
 import db.DbIntegrityException;
 import model.dao.DepartmentDao;
-import model.entities.Departmento;
+import model.entities.Departamento;
 
 public class DepartmentDaoJDBC implements DepartmentDao {
 
@@ -23,7 +23,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	}
 	
 	@Override
-	public Departmento findById(Integer id) {
+	public Departamento findById(Integer id) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -32,7 +32,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
-				Departmento obj = new Departmento();
+				Departamento obj = new Departamento();
 				obj.setId(rs.getInt("Id"));
 				obj.setName(rs.getString("Name"));
 				return obj;
@@ -49,7 +49,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	}
 
 	@Override
-	public List<Departmento> findAll() {
+	public List<Departamento> findAll() {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -57,10 +57,10 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 				"SELECT * FROM department ORDER BY Name");
 			rs = st.executeQuery();
 
-			List<Departmento> list = new ArrayList<>();
+			List<Departamento> list = new ArrayList<>();
 
 			while (rs.next()) {
-				Departmento obj = new Departmento();
+				Departamento obj = new Departamento();
 				obj.setId(rs.getInt("Id"));
 				obj.setName(rs.getString("Name"));
 				list.add(obj);
@@ -77,7 +77,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	}
 
 	@Override
-	public void insert(Departmento obj) {
+	public void insert(Departamento obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
@@ -111,7 +111,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	}
 
 	@Override
-	public void update(Departmento obj) {
+	public void update(Departamento obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(

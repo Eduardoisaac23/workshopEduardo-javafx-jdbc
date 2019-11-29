@@ -14,7 +14,7 @@ import com.mysql.jdbc.Statement;
 import db.DB;
 import db.DbException;
 import model.dao.FuncionarioDao;
-import model.entities.Departmento;
+import model.entities.Departamento;
 import model.entities.Funcionario;
 
 public class FuncionarioDaoJDBC implements FuncionarioDao {
@@ -40,8 +40,7 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 			st.setString(2, obj.getEmail());
 			st.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
 			st.setDouble(4, obj.getBaseSalary());
-			st.setInt(5, obj.getDepartment().getId());
-			
+		    st.setInt(5, obj.getDepartamento().getId());
 			int rowsAffected = st.executeUpdate();
 			
 			if (rowsAffected > 0) {
@@ -77,7 +76,7 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 			st.setString(2, obj.getEmail());
 			st.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
 			st.setDouble(4, obj.getBaseSalary());
-			st.setInt(5, obj.getDepartment().getId());
+			st.setInt(5, obj.getDepartamento().getId());
 			st.setInt(6, obj.getId());
 			
 			st.executeUpdate();
@@ -122,7 +121,7 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
-				Departmento dep = instantiateDepartment(rs);
+				Departamento dep = instantiateDepartment(rs);
 				Funcionario obj = instantiateSeller(rs, dep);
 				return obj;
 			}
@@ -137,19 +136,19 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 		}
 	}
 
-	private Funcionario instantiateSeller(ResultSet rs, Departmento dep) throws SQLException {
+	private Funcionario instantiateSeller(ResultSet rs, Departamento dep) throws SQLException {
 		Funcionario obj = new Funcionario();
 		obj.setId(rs.getInt("Id"));
 		obj.setName(rs.getString("Name"));
 		obj.setEmail(rs.getString("Email"));
 		obj.setBaseSalary(rs.getDouble("BaseSalary"));
 		obj.setBirthDate(rs.getDate("BirthDate"));
-		obj.setDepartment(dep);
+		obj.setDepartamento(dep);
 		return obj;
 	}
 
-	private Departmento instantiateDepartment(ResultSet rs) throws SQLException {
-		Departmento dep = new Departmento();
+	private Departamento instantiateDepartment(ResultSet rs) throws SQLException {
+		Departamento dep = new Departamento();
 		dep.setId(rs.getInt("DepartmentId"));
 		dep.setName(rs.getString("DepName"));
 		return dep;
@@ -169,11 +168,11 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 			rs = st.executeQuery();
 			
 			List<Funcionario> list = new ArrayList<>();
-			Map<Integer, Departmento> map = new HashMap<>();
+			Map<Integer, Departamento> map = new HashMap<>();
 			
 			while (rs.next()) {
 				
-				Departmento dep = map.get(rs.getInt("DepartmentId"));
+				Departamento dep = map.get(rs.getInt("DepartmentId"));
 				
 				if (dep == null) {
 					dep = instantiateDepartment(rs);
@@ -195,7 +194,7 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 	}
 
 	@Override
-	public List<Funcionario> findByDepartment(Departmento departmento) {
+	public List<Funcionario> findByDepartment(Departamento departamento) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -206,16 +205,16 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 					+ "WHERE DepartmentId = ? "
 					+ "ORDER BY Name");
 			
-			st.setInt(1, departmento.getId());
+			st.setInt(1, departamento.getId());
 			
 			rs = st.executeQuery();
 			
 			List<Funcionario> list = new ArrayList<>();
-			Map<Integer, Departmento> map = new HashMap<>();
+			Map<Integer, Departamento> map = new HashMap<>();
 			
 			while (rs.next()) {
 				
-				Departmento dep = map.get(rs.getInt("DepartmentId"));
+				Departamento dep = map.get(rs.getInt("DepartmentId"));
 				
 				if (dep == null) {
 					dep = instantiateDepartment(rs);

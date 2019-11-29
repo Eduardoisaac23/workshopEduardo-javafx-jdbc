@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import java.nio.channels.IllegalSelectorException;
 import java.util.ResourceBundle;
 
 import gui.util.Constraints;
@@ -9,9 +10,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.entities.Departamento;
 
-public class DepartmentoFormController implements Initializable{
+public class DepartamentoFormController implements Initializable{
 	
+	private Departamento entity;
 	
 	@FXML
 	private TextField txtId;
@@ -27,6 +30,11 @@ public class DepartmentoFormController implements Initializable{
 	
 	@FXML
 	private Button btCancel;
+	
+	public void setDepartamento(Departamento entity) {
+		this.entity= entity;
+		
+	}
 	
 	public void onBtSalvarAction() {
 		System.out.println("onBtSalvarAction");
@@ -44,6 +52,14 @@ public class DepartmentoFormController implements Initializable{
 	private void initializeNodes() {
 		Constraints.setTextFieldInteger(txtId);
 		Constraints.setTextFieldMaxLength(txtName, 30);
+	}
+	
+	public void updateFormDate() {
+		if(entity == null) {
+			throw new IllegalStateException("Entidade nula");
+		}
+		txtId.setText(String.valueOf(entity.getId()));
+		txtName.setText(entity.getName());
 	}
 
 }
