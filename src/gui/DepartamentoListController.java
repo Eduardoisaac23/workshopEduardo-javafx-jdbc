@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import application.Main;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -26,92 +28,89 @@ import javafx.stage.Stage;
 import model.Services.DepartamentoService;
 import model.entities.Departamento;
 
-
-
 public class DepartamentoListController implements Initializable, DataChangeListener {
 
-	//não se pode colocar aqui a implementação dessa classe
-	//pois acaba sendo um acoplamento forte
-	//para isso será criado um metodo set
-	private DepartamentoService servico;//  = new DepartamentoService();
-	
-	
+	// não se pode colocar aqui a implementação dessa classe
+	// pois acaba sendo um acoplamento forte
+	// para isso será criado um metodo set
+	private DepartamentoService servico;// = new DepartamentoService();
+
 	@FXML
 	private TableView<Departamento> tableViewDepartamento;
-	
+
 	@FXML
 	private TableColumn<Departamento, Integer> tableColumnId;
-	
+
 	@FXML
 	private TableColumn<Departamento, String> tableColumnName;
-	
+
+	@FXML
+	private TableColumn<Departamento, Departamento> tableColumnEDIT;
+
 	@FXML
 	private Button btNew;
-	
-	
-	//Vai ter que carregar a lista no ObservableList
+
+	// Vai ter que carregar a lista no ObservableList
 	private ObservableList<Departamento> obsList;
-	
-	
+
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = gui.util.Utils.currentStage(event);
-		//instancia um departamento vazio
+		// instancia um departamento vazio
 		Departamento obj = new Departamento();
 		createDialogForm(obj, "/gui/DepartamentoForm.fxml", parentStage);
 	}
-	
-	//metodo para injetar dependência por outro lugar
-	
+
+	// metodo para injetar dependência por outro lugar
+
 	public void setDepartamentoServico(DepartamentoService service) {
 		this.servico = service;
 	}
-	
-	
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializableNodes();
-		
+
 	}
 
-
-	//Metodo auxiliar
+	// Metodo auxiliar
 	private void initializableNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("Name"));
-		
-		Stage stage =  (Stage) Main.getMainScene().getWindow();
+
+		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewDepartamento.prefHeightProperty().bind(stage.heightProperty());
 	}
-	
-	/*metodo responsável por acessar o sreviço, carregar os departamentos e jogar 
-	 esses departamento em meu ObservableList linha 40
-	com isso vou associar ele com meu tableView e com isso os departamentos vão aparecer
-	na tela */
+
+	/*
+	 * metodo responsável por acessar o sreviço, carregar os departamentos e jogar
+	 * esses departamento em meu ObservableList linha 40 com isso vou associar ele
+	 * com meu tableView e com isso os departamentos vão aparecer na tela
+	 */
 	public void updateTableView() {
-		if(servico == null) {
+		if (servico == null) {
 			throw new IllegalStateException("Serviçoi estava nulo");
 		}
-		
+
 		List<Departamento> list = servico.findAll();
-		//aqui instância meu  ObservableList pegando os dados originais da listinha
+		// aqui instância meu ObservableList pegando os dados originais da listinha
 		obsList = FXCollections.observableArrayList(list);
 		tableViewDepartamento.setItems(obsList);
-		
+		initEditButtons();
 	}
-	
-	//finção para carregar a janela do formulário de um novo departamento
+
+	// finção para carregar a janela do formulário de um novo departamento
 	private void createDialogForm(Departamento obj, String absoluteName, Stage parenStage) {
-		
+
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
-			
+
 			DepartamentoFormController controller = loader.getController();
 			controller.setDepartamento(obj);
-			//Injeção de dependência
+			// Injeção de dependência
 			controller.setDepartamentoService(new DepartamentoService());
-			//--------------------------
+			// --------------------------
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormDate();
 
@@ -122,8 +121,8 @@ public class DepartamentoListController implements Initializable, DataChangeList
 			dialogStage.initOwner(parenStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.showAndWait();
-			
-		}catch(IOException e ) {
+
+		} catch (IOException e) {
 			Alerts.showAlert("IO Exception", "Erroao carregar a view", e.getMessage(), AlertType.ERROR);
 		}
 	}
@@ -133,4 +132,25 @@ public class DepartamentoListController implements Initializable, DataChangeList
 		updateTableView();
 	}
 
+	private void initEditButtons() {
+		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnEDIT.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
+			private final Button button = new Button("edit");
+
+			@Override
+			protected void updateItem(Departamento obj, boolean empty) {
+				super.updateItem(obj, empty);
+
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+
+				setGraphic(button);
+				button.setOnAction(event -> createDialogForm(obj, "/gui/DepartamentoForm.fxml",
+						gui.util.Utils.currentStage(event)));
+			}
+
+		});
+	}
 }
