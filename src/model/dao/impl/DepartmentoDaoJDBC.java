@@ -11,14 +11,14 @@ import java.util.List;
 import db.DB;
 import db.DbException;
 import db.DbIntegrityException;
-import model.dao.DepartmentDao;
+import model.dao.DepartmentoDao;
 import model.entities.Departamento;
 
-public class DepartmentDaoJDBC implements DepartmentDao {
+public class DepartmentoDaoJDBC implements DepartmentoDao {
 
 	private Connection conn;
 	
-	public DepartmentDaoJDBC(Connection conn) {
+	public DepartmentoDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
 	
