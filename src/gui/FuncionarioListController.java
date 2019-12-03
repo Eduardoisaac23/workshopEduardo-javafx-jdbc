@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -9,6 +10,7 @@ import application.Main;
 import db.DbIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
+import gui.util.Utils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,6 +44,15 @@ public class FuncionarioListController implements Initializable, DataChangeListe
 	@FXML
 	private TableColumn<Funcionario, String> tableColumnName;
 
+	@FXML
+	private TableColumn<Funcionario, String> tableColumnEmail;
+	
+	@FXML
+	private TableColumn<Funcionario, Date> tableColumnBirthDate;
+	
+	@FXML
+	private TableColumn<Funcionario, Double> tableColumnbaseSalary;
+	
 	@FXML
 	private TableColumn<Funcionario, Funcionario> tableColumnEDIT;
 
@@ -78,7 +89,11 @@ public class FuncionarioListController implements Initializable, DataChangeListe
 	private void initializableNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("Name"));
-
+		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+		Utils.formatTableColumnDate(tableColumnBirthDate, "dd/MM/yyyy");
+		tableColumnbaseSalary.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
+		Utils.formatTableColumnDouble(tableColumnbaseSalary, 2);
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewFuncionario.prefHeightProperty().bind(stage.heightProperty());
 	}
