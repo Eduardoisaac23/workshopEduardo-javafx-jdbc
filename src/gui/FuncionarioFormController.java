@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -136,12 +138,32 @@ public class FuncionarioFormController implements Initializable{
 		ValidationException exception = new ValidationException("Validação  errada");
 		
 		obj.setId( Utils.tryParseToInt(txtId.getText()));
-		
+
 		if(txtName.getText() == null || txtName.getText().trim().equals("")) {
 			exception.addErro("name", "O campo não pode ser vazio");
 		}
 		obj.setName(txtName.getText());
 		
+		if(txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
+			exception.addErro("email", "O campo não pode ser vazio");
+		}
+		obj.setEmail(txtEmail.getText());
+		
+		if(dpBirthDate.getValue() == null) {
+			exception.addErro("birthDate", "O campo não pode ser vazio");
+		}else {
+		//Pega o valor do Datepicker
+		Instant instant = Instant.from(dpBirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+		obj.setBirthDate(Date.from(instant));
+		}
+		
+		if(txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals("")) {
+			exception.addErro("baseSalary", "O campo não pode ser vazio");
+		}
+		obj.setBaseSalary(Utils.tryParseToDouble(txtBaseSalary.getText()));
+		
+		obj.setDepartamento(comboBoxDepartmento.getValue());
+				
 		if(exception.getErros().size() > 0) {
 			throw exception;
 		}
@@ -199,9 +221,18 @@ public class FuncionarioFormController implements Initializable{
 	
 	private void setErrorMenssage(Map<String, String> erros) {
 		Set<String> fields = erros.keySet();
-		if(fields.contains("name")) {
-			labelErrorName.setText(erros.get("name"));
-		}
+		
+		
+		//Operador condicional ternário no lugat de if else
+							//se for verdadeira					          // se for falsa vazio
+		labelErrorName.setText(fields.contains("name") ? erros.get("name") : "");
+		
+		labelErrorEmail.setText(fields.contains("email") ? erros.get("email") : "");
+		
+		labelErrorBaseSalary.setText(fields.contains("baseSalary") ? erros.get("baseSalary") : "");
+		
+		labelErrorBirthDate.setText(fields.contains("birthDate") ? erros.get("birthDate") : "");
+
 	}
 	
 	private void initializeComboBoxDepartment() {
